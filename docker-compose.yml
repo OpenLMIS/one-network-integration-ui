@@ -1,0 +1,34 @@
+version: "2"
+services:
+  one-network-integration-ui:
+    image: openlmis/dev-ui:9.0.3-SNAPSHOT
+    ports:
+      - "9000:9000"
+      - "9876:9876"
+    working_dir: /app
+    volumes:
+      - '.:/app'
+    env_file: .env
+    volumes_from:
+      - auth-ui
+      - ui-components
+      - ui-layout
+    depends_on:
+      - auth-ui
+      - ui-components
+      - ui-layout
+  auth-ui:
+    image: openlmis/auth-ui:6.2.7-SNAPSHOT
+    volumes:
+      - '/openlmis-auth-ui'
+  ui-components:
+    image: openlmis/ui-components:7.2.6-SNAPSHOT
+    volumes:
+      - '/openlmis-ui-components'
+  ui-layout:
+    image: openlmis/ui-layout:5.2.0-SNAPSHOT
+    volumes:
+      - '/openlmis-ui-layout'
+  image:
+    build: .
+    image: openlmis/one-network-integration-ui
