@@ -4,10 +4,10 @@ pipeline {
     agent any
     options {
         buildDiscarder(logRotator(
-            numToKeepStr: env.BRANCH_NAME.equals("master") ? '15' : '3',
-            daysToKeepStr: env.BRANCH_NAME.equals("master") || env.BRANCH_NAME.startsWith("rel-") ? '' : '7',
-            artifactDaysToKeepStr: env.BRANCH_NAME.equals("master") || env.BRANCH_NAME.startsWith("rel-") ? '' : '3',
-            artifactNumToKeepStr: env.BRANCH_NAME.equals("master") || env.BRANCH_NAME.startsWith("rel-") ? '' : '1'
+            numToKeepStr: env.BRANCH_NAME.equals("main") ? '15' : '3',
+            daysToKeepStr: env.BRANCH_NAME.equals("main") || env.BRANCH_NAME.startsWith("rel-") ? '' : '7',
+            artifactDaysToKeepStr: env.BRANCH_NAME.equals("main") || env.BRANCH_NAME.startsWith("rel-") ? '' : '3',
+            artifactNumToKeepStr: env.BRANCH_NAME.equals("main") || env.BRANCH_NAME.startsWith("rel-") ? '' : '1'
         ))
         disableConcurrentBuilds()
         skipStagesAfterUnstable()
@@ -54,7 +54,7 @@ pipeline {
                             sh '''
                                 sudo rm -f .env
                                 cp $ENV_FILE .env
-                                if [ "$GIT_BRANCH" != "master" ]; then
+                                if [ "$GIT_BRANCH" != "main" ]; then
                                     sed -i '' -e "s#^TRANSIFEX_PUSH=.*#TRANSIFEX_PUSH=false#" .env  2>/dev/null || true
                                 fi
                                 docker-compose pull
@@ -93,7 +93,7 @@ pipeline {
         stage('Build reference-ui') {
             when {
                 expression {
-                    return "${env.GIT_BRANCH}" == 'master' && VERSION.endsWith("SNAPSHOT")
+                    return "${env.GIT_BRANCH}" == 'main' && VERSION.endsWith("SNAPSHOT")
                 }
             }
             steps {
@@ -112,7 +112,7 @@ pipeline {
         stage('Push image') {
             when {
                 expression {
-                    return env.GIT_BRANCH == 'master' || env.GIT_BRANCH =~ /rel-.+/
+                    return env.GIT_BRANCH == 'main' || env.GIT_BRANCH =~ /rel-.+/
                 }
             }
             steps {
@@ -139,7 +139,7 @@ pipeline {
         fixed {
             script {
                 BRANCH = "${env.GIT_BRANCH}".trim()
-                if (BRANCH.equals("master") || BRANCH.startsWith("rel-")) {
+                if (BRANCH.equals("main") || BRANCH.startsWith("rel-")) {
                     slackSend color: 'good', message: "${env.JOB_NAME} - #${env.BUILD_NUMBER} Back to normal"
                 }
             }
@@ -153,7 +153,7 @@ def notifyAfterFailure() {
         messageColor = 'warning'
     }
     BRANCH = "${env.GIT_BRANCH}".trim()
-    if (BRANCH.equals("master") || BRANCH.startsWith("rel-")) {
+    if (BRANCH.equals("main") || BRANCH.startsWith("rel-")) {
         slackSend color: "${messageColor}", message: "${env.JOB_NAME} - #${env.BUILD_NUMBER} ${env.STAGE_NAME} ${currentBuild.result} (<${env.BUILD_URL}|Open>)"
     }
     emailext subject: "${env.JOB_NAME} - #${env.BUILD_NUMBER} ${env.STAGE_NAME} ${currentBuild.result}",
