@@ -1,0 +1,9 @@
+{
+    "oneNetworkIntegration.configuration": "One Network Integration",
+    "oneNetworkIntegration.header": "Manage One Network Integration",
+    "oneNetworkIntegration.enableSchedulerMessage": "Integration is enabled. Click the button below to disable it.",
+    "oneNetworkIntegration.disableSchedulerMessage": "Integration is disabled. Click the button below to enable it.",
+    "oneNetworkIntegration.enableScheduler": "Enable integration",
+    "oneNetworkIntegration.disablecheduler": "Disable integration"
+}
+

@@ -1,0 +1,10 @@
+<h2>{{'oneNetworkIntegration.header' | message}}</h2>
+<div>
+    <h1 ng-if="vm.schedulerEnabled">{{'oneNetworkIntegration.enableSchedulerMessage' | message}}</h1>
+    <h1 ng-if="!vm.schedulerEnabled">{{'oneNetworkIntegration.disableSchedulerMessage' | message}}</h1>
+    
+    <button type="button" class="primary" ng-if="!vm.schedulerEnabled" ng-click="vm.enableScheduler()">{{'oneNetworkIntegration.enableScheduler' | message}}</button>
+    <button type="button" class="primary" ng-if="vm.schedulerEnabled" ng-click="vm.disableScheduler()">{{'oneNetworkIntegration.disablecheduler' | message}}</button>
+</div>
+
+
