@@ -54,9 +54,6 @@ pipeline {
                             sh '''
                                 sudo rm -f .env
                                 cp $ENV_FILE .env
-                                if [ "$GIT_BRANCH" != "master" ]; then
-                                    sed -i '' -e "s#^TRANSIFEX_PUSH=.*#TRANSIFEX_PUSH=false#" .env  2>/dev/null || true
-                                fi
                                 docker-compose pull
                                 docker-compose down --volumes
                                 docker-compose run --entrypoint /dev-ui/build.sh one-network-integration-ui
