@@ -13,10 +13,12 @@ services:
       - auth-ui
       - ui-components
       - ui-layout
+      - referencedata-ui
     depends_on:
       - auth-ui
       - ui-components
       - ui-layout
+      - referencedata-ui
   auth-ui:
     image: openlmis/auth-ui:6.2.7-SNAPSHOT
     volumes:
@@ -29,6 +31,10 @@ services:
     image: openlmis/ui-layout:5.2.0-SNAPSHOT
     volumes:
       - '/openlmis-ui-layout'
+  referencedata-ui:
+    image: openlmis/referencedata-ui:5.6.6-SNAPSHOT
+    volumes:
+      - '/openlmis-referencedata-ui'
   image:
     build: .
     image: openlmis/one-network-integration-ui

@@ -3,6 +3,7 @@
         "/openlmis-ui-components",
         "/openlmis-ui-layout",
         "/openlmis-auth-ui",
+        "/openlmis-referencedata-ui",
         "/one-network-integration-ui"
     ]
 }

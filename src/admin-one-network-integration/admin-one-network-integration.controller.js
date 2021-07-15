@@ -22,7 +22,7 @@
      * @name admin-one-network-integration.controller:oneNetworkIntegrationController
      *
      * @description
-     * Controller for managing valid sources list screen.
+     * Controller for managing one network integration.
      */
     angular
         .module('admin-one-network-integration')
@@ -37,8 +37,9 @@
         var vm = this;
 
         vm.$onInit = onInit;
-        vm.enableScheduler = enableScheduler;
-        vm.disableScheduler = disableScheduler;
+        vm.changeSchedulerState = changeSchedulerState;
+        vm.buttonMessage = undefined;
+        vm.headerMessage = undefined;
 
         /**
          * @ngdoc property
@@ -47,7 +48,7 @@
          * @type {boolean}
          *
          * @description
-         * Contains filtered schedulerEnabled.
+         * Contains schedulerEnabled - schedule status.
          */
         vm.schedulerEnabled = undefined;
 
@@ -61,16 +62,42 @@
          */
         function onInit() {
             vm.schedulerEnabled = scheduler.schedulerEnabled;
+            setMessages();
         }
 
-        function enableScheduler() {
-            vm.schedulerEnabled = oneNetworkIntegrationSchedulerService.enableScheduler();
+        /**
+         * @ngdoc method
+         * @methodOf admin-one-network-integration.controller:oneNetworkIntegrationController
+         * @name changeSchedulerState
+         *
+         * @description
+         * Changes scheduler state and set appropriate messages.
+         */
+        function changeSchedulerState() {
+            if (vm.schedulerEnabled) {
+                oneNetworkIntegrationSchedulerService.disableScheduler()
+                    .then(function(response) {
+                        vm.schedulerEnabled = response.schedulerEnabled;
+                        setMessages();
+                    });
+            } else {
+                oneNetworkIntegrationSchedulerService.enableScheduler()
+                    .then(function(response) {
+                        vm.schedulerEnabled = response.schedulerEnabled;
+                        setMessages();
+                    });
+            }
         }
 
-        function disableScheduler() {
-            vm.schedulerEnabled = oneNetworkIntegrationSchedulerService.disableScheduler();
+        function setMessages() {
+            if (vm.schedulerEnabled) {
+                vm.buttonMessage = 'oneNetworkIntegration.disablecheduler';
+                vm.headerMessage = 'oneNetworkIntegration.enableSchedulerMessage';
+            } else {
+                vm.buttonMessage = 'oneNetworkIntegration.enableScheduler';
+                vm.headerMessage = 'oneNetworkIntegration.disableSchedulerMessage';
+            }
         }
-
     }
 
 })();

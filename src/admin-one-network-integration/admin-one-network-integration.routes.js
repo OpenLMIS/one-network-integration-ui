@@ -19,9 +19,9 @@
 
     angular.module('admin-one-network-integration').config(routes);
 
-    routes.$inject = ['$stateProvider', 'ADMINISTRATION_RIGHTS'];
+    routes.$inject = ['$stateProvider'];
 
-    function routes($stateProvider, ADMINISTRATION_RIGHTS) {
+    function routes($stateProvider) {
 
         $stateProvider.state('openlmis.administration.oneNetworkIntegration', {
             showInNavigation: true,
@@ -30,7 +30,6 @@
             controller: 'oneNetworkIntegrationController',
             templateUrl: 'admin-one-network-integration/admin-one-network-integration.html',
             controllerAs: 'vm',
-            accessRights: [ADMINISTRATION_RIGHTS.FACILITIES_MANAGE],
             resolve: {
                 scheduler: function(oneNetworkIntegrationSchedulerService) {
                     return oneNetworkIntegrationSchedulerService.getStatus()
