@@ -18,24 +18,20 @@ describe('oneNetworkIntegrationController', function() {
     beforeEach(function() {
         module('admin-one-network-integration');
         module('one-network-integration-scheduler');
+        module('openlmis-function-decorator');
 
         inject(function($injector) {
             this.$q = $injector.get('$q');
             this.$controller = $injector.get('$controller');
             this.$state = $injector.get('$state');
+            this.$rootScope = $injector.get('$rootScope');
             this.oneNetworkIntegrationSchedulerService = $injector.get('oneNetworkIntegrationSchedulerService');
+            this.FunctionDecorator = $injector.get('FunctionDecorator');
         });
 
         this.scheduler = {
             schedulerEnabled: true
         };
-
-        this.vm = this.$controller('oneNetworkIntegrationController', {
-            scheduler: this.scheduler,
-            schedulerEnabled: this.scheduler.schedulerEnabled
-        });
-
-        this.vm.$onInit();
 
         spyOn(this.oneNetworkIntegrationSchedulerService, 'enableScheduler')
             .andReturn(this.$q.resolve(this.scheduler));
@@ -43,6 +39,23 @@ describe('oneNetworkIntegrationController', function() {
             .andReturn(this.$q.resolve({
                 schedulerEnabled: false
             }));
+
+        var context = this;
+        spyOn(this.$state, 'go');
+        spyOn(this.FunctionDecorator.prototype, 'decorateFunction').andCallFake(function(fn) {
+            context.fn = fn;
+            return this;
+        });
+        spyOn(this.FunctionDecorator.prototype, 'getDecoratedFunction').andCallFake(function() {
+            return context.fn;
+        });
+
+        this.vm = this.$controller('oneNetworkIntegrationController', {
+            scheduler: this.scheduler,
+            schedulerEnabled: this.scheduler.schedulerEnabled
+        });
+
+        this.vm.$onInit();
     });
 
     describe('onInit', function() {
@@ -58,6 +71,7 @@ describe('oneNetworkIntegrationController', function() {
             this.vm.schedulerEnabled = true;
 
             this.vm.changeSchedulerState();
+            this.$rootScope.$apply();
 
             expect(this.oneNetworkIntegrationSchedulerService.disableScheduler).toHaveBeenCalled();
         });
@@ -66,6 +80,7 @@ describe('oneNetworkIntegrationController', function() {
             this.vm.schedulerEnabled = false;
 
             this.vm.changeSchedulerState();
+            this.$rootScope.$apply();
 
             expect(this.oneNetworkIntegrationSchedulerService.enableScheduler).toHaveBeenCalled();
         });

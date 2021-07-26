@@ -26,6 +26,7 @@
     angular.module('admin-one-network-integration', [
         'openlmis-admin',
         'ui.router',
-        'openlmis-templates'
+        'openlmis-templates',
+        'openlmis-function-decorator'
     ]);
 })();

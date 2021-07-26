@@ -29,15 +29,18 @@
         .controller('oneNetworkIntegrationController', controller);
 
     controller.$inject = [
-        '$state', 'scheduler', 'oneNetworkIntegrationSchedulerService'
+        '$state', 'scheduler', 'oneNetworkIntegrationSchedulerService', 'FunctionDecorator'
     ];
 
-    function controller($state, scheduler, oneNetworkIntegrationSchedulerService) {
+    function controller($state, scheduler, oneNetworkIntegrationSchedulerService, FunctionDecorator) {
 
         var vm = this;
 
         vm.$onInit = onInit;
-        vm.changeSchedulerState = changeSchedulerState;
+        vm.changeSchedulerState = new FunctionDecorator()
+            .decorateFunction(changeSchedulerState)
+            .withLoading(true)
+            .getDecoratedFunction();
         vm.buttonMessage = undefined;
         vm.headerMessage = undefined;
 
@@ -79,12 +82,14 @@
                     .then(function(response) {
                         vm.schedulerEnabled = response.schedulerEnabled;
                         setMessages();
+                        $state.reload();
                     });
             } else {
                 oneNetworkIntegrationSchedulerService.enableScheduler()
                     .then(function(response) {
                         vm.schedulerEnabled = response.schedulerEnabled;
                         setMessages();
+                        $state.reload();
                     });
             }
         }
