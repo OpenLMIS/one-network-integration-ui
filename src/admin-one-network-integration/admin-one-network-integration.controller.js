@@ -29,16 +29,16 @@
         .controller('oneNetworkIntegrationController', controller);
 
     controller.$inject = [
-        '$state', 'scheduler', 'oneNetworkIntegrationSchedulerService', 'FunctionDecorator'
+        '$state', 'integration', 'oneNetworkIntegrationService', 'FunctionDecorator'
     ];
 
-    function controller($state, scheduler, oneNetworkIntegrationSchedulerService, FunctionDecorator) {
+    function controller($state, integration, oneNetworkIntegrationService, FunctionDecorator) {
 
         var vm = this;
 
         vm.$onInit = onInit;
-        vm.changeSchedulerState = new FunctionDecorator()
-            .decorateFunction(changeSchedulerState)
+        vm.changeIntegrationState = new FunctionDecorator()
+            .decorateFunction(changeIntegrationState)
             .withLoading(true)
             .getDecoratedFunction();
         vm.buttonMessage = undefined;
@@ -47,13 +47,13 @@
         /**
          * @ngdoc property
          * @propertyOf admin-one-network-integration.controller:oneNetworkIntegrationController
-         * @name schedulerEnabled
+         * @name enabled
          * @type {boolean}
          *
          * @description
-         * Contains schedulerEnabled - schedule status.
+         * Contains enabled - integration status.
          */
-        vm.schedulerEnabled = undefined;
+        vm.enabled = undefined;
 
         /**
          * @ngdoc method
@@ -64,30 +64,30 @@
          * Method that is executed on initiating oneNetworkIntegrationController.
          */
         function onInit() {
-            vm.schedulerEnabled = scheduler.schedulerEnabled;
+            vm.enabled = integration.enabled;
             setMessages();
         }
 
         /**
          * @ngdoc method
          * @methodOf admin-one-network-integration.controller:oneNetworkIntegrationController
-         * @name changeSchedulerState
+         * @name changeIntegrationState
          *
          * @description
-         * Changes scheduler state and set appropriate messages.
+         * Changes integration state and set appropriate messages.
          */
-        function changeSchedulerState() {
-            if (vm.schedulerEnabled) {
-                oneNetworkIntegrationSchedulerService.disableScheduler()
-                    .then(function(response) {
-                        vm.schedulerEnabled = response.schedulerEnabled;
+        function changeIntegrationState() {
+            if (vm.enabled) {
+                oneNetworkIntegrationService.disable()
+                    .then(function() {
+                        vm.enabled = false;
                         setMessages();
                         $state.reload();
                     });
             } else {
-                oneNetworkIntegrationSchedulerService.enableScheduler()
-                    .then(function(response) {
-                        vm.schedulerEnabled = response.schedulerEnabled;
+                oneNetworkIntegrationService.enable()
+                    .then(function() {
+                        vm.enabled = true;
                         setMessages();
                         $state.reload();
                     });
@@ -95,12 +95,12 @@
         }
 
         function setMessages() {
-            if (vm.schedulerEnabled) {
-                vm.buttonMessage = 'oneNetworkIntegration.disablecheduler';
-                vm.headerMessage = 'oneNetworkIntegration.enableSchedulerMessage';
+            if (vm.enabled) {
+                vm.buttonMessage = 'oneNetworkIntegration.disable';
+                vm.headerMessage = 'oneNetworkIntegration.enableMessage';
             } else {
-                vm.buttonMessage = 'oneNetworkIntegration.enableScheduler';
-                vm.headerMessage = 'oneNetworkIntegration.disableSchedulerMessage';
+                vm.buttonMessage = 'oneNetworkIntegration.enable';
+                vm.headerMessage = 'oneNetworkIntegration.disableMessage';
             }
         }
     }

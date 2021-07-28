@@ -13,35 +13,35 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-describe('oneNetworkIntegrationSchedulerService', function() {
+describe('oneNetworkIntegrationService', function() {
 
     beforeEach(function() {
-        module('one-network-integration-scheduler');
+        module('one-network-integration');
 
         inject(function($injector) {
             this.$httpBackend = $injector.get('$httpBackend');
             this.$rootScope = $injector.get('$rootScope');
             this.openlmisUrlFactory = $injector.get('openlmisUrlFactory');
-            this.oneNetworkIntegrationSchedulerService = $injector.get('oneNetworkIntegrationSchedulerService');
+            this.oneNetworkIntegrationService = $injector.get('oneNetworkIntegrationService');
         });
 
-        this.scheduler = {
-            schedulerEnabled: true
+        this.integration = {
+            enabled: true
         };
     });
 
     describe('getStatus', function() {
 
-        it('should get scheduler status', function() {
+        it('should get integration status', function() {
             var data;
 
-            var scheduler = this.scheduler;
+            var integration = this.integration;
 
             this.$httpBackend
-                .expectGET(this.openlmisUrlFactory('/api/scheduler/status'))
-                .respond(200, scheduler);
+                .expectGET(this.openlmisUrlFactory('/api/integration/status'))
+                .respond(200, integration);
 
-            this.oneNetworkIntegrationSchedulerService.getStatus()
+            this.oneNetworkIntegrationService.getStatus()
                 .then(function(response) {
                     data = response;
                 });
@@ -49,22 +49,22 @@ describe('oneNetworkIntegrationSchedulerService', function() {
             this.$httpBackend.flush();
             this.$rootScope.$apply();
 
-            expect(data.schedulerEnabled).toBe(this.scheduler.schedulerEnabled);
+            expect(data.enabled).toBe(this.integration.enabled);
         });
     });
 
-    describe('enableScheduler', function() {
+    describe('enable', function() {
 
-        it('should set scheduler status to enabled', function() {
+        it('should set integration status to enabled', function() {
             var data;
 
-            var scheduler = this.scheduler;
+            var integration = this.integration;
 
             this.$httpBackend
-                .expectPUT(this.openlmisUrlFactory('/api/scheduler/enable'))
-                .respond(200, scheduler);
+                .expectPUT(this.openlmisUrlFactory('/api/integration/enable'))
+                .respond(200, integration);
 
-            this.oneNetworkIntegrationSchedulerService.enableScheduler()
+            this.oneNetworkIntegrationService.enable()
                 .then(function(response) {
                     data = response;
                 });
@@ -72,22 +72,22 @@ describe('oneNetworkIntegrationSchedulerService', function() {
             this.$httpBackend.flush();
             this.$rootScope.$apply();
 
-            expect(data.schedulerEnabled).toBe(this.scheduler.schedulerEnabled);
+            expect(data.enabled).toBe(this.integration.enabled);
         });
     });
 
-    describe('disableScheduler', function() {
+    describe('disable', function() {
 
-        it('should set scheduler status to disabled', function() {
+        it('should set integration status to disabled', function() {
             var data;
-            this.scheduler.schedulerEnabled = false;
-            var scheduler = this.scheduler;
+            this.integration.enabled = false;
+            var integration = this.integration;
 
             this.$httpBackend
-                .expectPUT(this.openlmisUrlFactory('/api/scheduler/disable'))
-                .respond(200, scheduler);
+                .expectPUT(this.openlmisUrlFactory('/api/integration/disable'))
+                .respond(200, integration);
 
-            this.oneNetworkIntegrationSchedulerService.disableScheduler()
+            this.oneNetworkIntegrationService.disable()
                 .then(function(response) {
                     data = response;
                 });
@@ -95,7 +95,7 @@ describe('oneNetworkIntegrationSchedulerService', function() {
             this.$httpBackend.flush();
             this.$rootScope.$apply();
 
-            expect(data.schedulerEnabled).toBe(this.scheduler.schedulerEnabled);
+            expect(data.enabled).toBe(this.integration.enabled);
         });
     });
 

@@ -18,48 +18,48 @@
 
     /**
      * @ngdoc service
-     * @name one-network-integration-scheduler.oneNetworkIntegrationSchedulerService
+     * @name one-network-integration.oneNetworkIntegrationService
      *
      * @description
-     * Responsible for retrieving scheduler info from the One Network integration.
+     * Responsible for retrieving config info from the One Network integration.
      */
     angular
-        .module('one-network-integration-scheduler')
-        .service('oneNetworkIntegrationSchedulerService', service);
+        .module('one-network-integration')
+        .service('oneNetworkIntegrationService', service);
 
     service.$inject = [
         'openlmisUrlFactory', '$resource'
     ];
 
     function service(openlmisUrlFactory, $resource) {
-        var resource = $resource(openlmisUrlFactory('/api/scheduler'), {}, {
+        var resource = $resource(openlmisUrlFactory('/api/integration'), {}, {
             getStatus: {
                 method: 'GET',
-                url: openlmisUrlFactory('/api/scheduler/status')
+                url: openlmisUrlFactory('/api/integration/status')
             },
-            enableScheduler: {
+            enable: {
                 method: 'PUT',
-                url: openlmisUrlFactory('/api/scheduler/enable')
+                url: openlmisUrlFactory('/api/integration/enable')
             },
-            disableScheduler: {
+            disable: {
                 method: 'PUT',
-                url: openlmisUrlFactory('/api/scheduler/disable')
+                url: openlmisUrlFactory('/api/integration/disable')
             }
         });
 
         this.getStatus = getStatus;
-        this.enableScheduler = enableScheduler;
-        this.disableScheduler = disableScheduler;
+        this.enable = enable;
+        this.disable = disable;
 
         /**
          * @ngdoc method
-         * @methodOf one-network-integration-scheduler.oneNetworkIntegrationSchedulerService
+         * @methodOf one-network-integration.oneNetworkIntegrationService
          * @name getStatus
          *
          * @description
-         * Provides current scheduler status
+         * Provides current status of integration
          *
-         * @return  {Promise}           the promise resolving to the current scheduler status
+         * @return  {Promise}           the promise resolving to the current status
          */
         function getStatus() {
             return resource.getStatus().$promise;
@@ -67,30 +67,26 @@
 
         /**
          * @ngdoc method
-         * @methodOf one-network-integration-scheduler.oneNetworkIntegrationSchedulerService
-         * @name enableScheduler
+         * @methodOf one-network-integration.oneNetworkIntegrationService
+         * @name enable
          *
          * @description
-         * Enables the scheduler.
-         *
-         * @return  {Promise}           the promise resolving to the current scheduler status
+         * Enables the integration.
          */
-        function enableScheduler() {
-            return resource.enableScheduler().$promise;
+        function enable() {
+            return resource.enable().$promise;
         }
 
         /**
          * @ngdoc method
-         * @methodOf one-network-integration-scheduler.oneNetworkIntegrationSchedulerService
-         * @name disableScheduler
+         * @methodOf one-network-integration.oneNetworkIntegrationService
+         * @name disable
          *
          * @description
-         * Disables the scheduler.
-         *
-         * @return  {Promise}           the promise resolving to the current scheduler status
+         * Disables the integration.
          */
-        function disableScheduler() {
-            return resource.disableScheduler().$promise;
+        function disable() {
+            return resource.disable().$promise;
 
         }
     }

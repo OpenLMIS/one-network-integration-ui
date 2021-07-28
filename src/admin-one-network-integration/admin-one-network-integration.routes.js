@@ -31,8 +31,8 @@
             templateUrl: 'admin-one-network-integration/admin-one-network-integration.html',
             controllerAs: 'vm',
             resolve: {
-                scheduler: function(oneNetworkIntegrationSchedulerService) {
-                    return oneNetworkIntegrationSchedulerService.getStatus()
+                integration: function(oneNetworkIntegrationService) {
+                    return oneNetworkIntegrationService.getStatus()
                         .then(function(response) {
                             return response;
                         });

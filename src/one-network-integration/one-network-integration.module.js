@@ -17,12 +17,12 @@
     'use strict';
 
     /**
-     * @module one-network-integration-scheduler
+     * @module one-network-integration
      *
      * @description
-     * Provides service for communicating with the one-network-integration scheduler.
+     * Provides service for communicating with the one-network-integration.
      */
-    angular.module('one-network-integration-scheduler', [
+    angular.module('one-network-integration', [
         'ngResource',
         'openlmis-urls',
         'openlmis-repository',

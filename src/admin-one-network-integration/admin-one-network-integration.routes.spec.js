@@ -17,23 +17,23 @@ describe('openlmis.administration.oneNetworkIntegration', function() {
 
     beforeEach(function() {
         module('admin-one-network-integration');
-        module('one-network-integration-scheduler');
+        module('one-network-integration');
 
         inject(function($injector) {
-            this.oneNetworkIntegrationSchedulerService = $injector
-                .get('oneNetworkIntegrationSchedulerService');
+            this.oneNetworkIntegrationService = $injector
+                .get('oneNetworkIntegrationService');
             this.$q = $injector.get('$q');
             this.$location = $injector.get('$location');
             this.$rootScope = $injector.get('$rootScope');
             this.$state = $injector.get('$state');
         });
 
-        this.scheduler = {
-            schedulerEnabled: true
+        this.integration = {
+            enabled: true
         };
 
-        spyOn(this.oneNetworkIntegrationSchedulerService, 'getStatus')
-            .andReturn(this.$q.resolve(this.scheduler));
+        spyOn(this.oneNetworkIntegrationService, 'getStatus')
+            .andReturn(this.$q.resolve(this.integration));
 
         this.goToUrl = goToUrl;
         this.getResolvedValue = getResolvedValue;
@@ -49,11 +49,11 @@ describe('openlmis.administration.oneNetworkIntegration', function() {
             expect(this.$state.current.name).toEqual('openlmis.administration.oneNetworkIntegration');
         });
 
-        it('should resolve scheduler', function() {
+        it('should resolve integration', function() {
             this.goToUrl('/administration/oneNetworkIntegration');
 
-            expect(this.getResolvedValue('scheduler')).toEqual(this.scheduler);
-            expect(this.oneNetworkIntegrationSchedulerService.getStatus).toHaveBeenCalled();
+            expect(this.getResolvedValue('integration')).toEqual(this.integration);
+            expect(this.oneNetworkIntegrationService.getStatus).toHaveBeenCalled();
         });
 
     });

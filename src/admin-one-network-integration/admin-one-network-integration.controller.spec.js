@@ -17,7 +17,7 @@ describe('oneNetworkIntegrationController', function() {
 
     beforeEach(function() {
         module('admin-one-network-integration');
-        module('one-network-integration-scheduler');
+        module('one-network-integration');
         module('openlmis-function-decorator');
 
         inject(function($injector) {
@@ -25,19 +25,19 @@ describe('oneNetworkIntegrationController', function() {
             this.$controller = $injector.get('$controller');
             this.$state = $injector.get('$state');
             this.$rootScope = $injector.get('$rootScope');
-            this.oneNetworkIntegrationSchedulerService = $injector.get('oneNetworkIntegrationSchedulerService');
+            this.oneNetworkIntegrationService = $injector.get('oneNetworkIntegrationService');
             this.FunctionDecorator = $injector.get('FunctionDecorator');
         });
 
-        this.scheduler = {
-            schedulerEnabled: true
+        this.integration = {
+            enabled: true
         };
 
-        spyOn(this.oneNetworkIntegrationSchedulerService, 'enableScheduler')
-            .andReturn(this.$q.resolve(this.scheduler));
-        spyOn(this.oneNetworkIntegrationSchedulerService, 'disableScheduler')
+        spyOn(this.oneNetworkIntegrationService, 'enable')
+            .andReturn(this.$q.resolve(this.integration));
+        spyOn(this.oneNetworkIntegrationService, 'disable')
             .andReturn(this.$q.resolve({
-                schedulerEnabled: false
+                enabled: false
             }));
 
         var context = this;
@@ -51,8 +51,8 @@ describe('oneNetworkIntegrationController', function() {
         });
 
         this.vm = this.$controller('oneNetworkIntegrationController', {
-            scheduler: this.scheduler,
-            schedulerEnabled: this.scheduler.schedulerEnabled
+            integration: this.integration,
+            enabled: this.integration.enabled
         });
 
         this.vm.$onInit();
@@ -61,28 +61,28 @@ describe('oneNetworkIntegrationController', function() {
     describe('onInit', function() {
 
         it('should expose facility name', function() {
-            expect(this.vm.schedulerEnabled).toEqual(this.scheduler.schedulerEnabled);
+            expect(this.vm.enabled).toEqual(this.integration.enabled);
         });
     });
 
-    describe('changeSchedulerState', function() {
+    describe('changeIntegrationState', function() {
 
-        it('should change scheduler state to disabled', function() {
-            this.vm.schedulerEnabled = true;
+        it('should change integration state to disabled', function() {
+            this.vm.enabled = true;
 
-            this.vm.changeSchedulerState();
+            this.vm.changeIntegrationState();
             this.$rootScope.$apply();
 
-            expect(this.oneNetworkIntegrationSchedulerService.disableScheduler).toHaveBeenCalled();
+            expect(this.oneNetworkIntegrationService.disable).toHaveBeenCalled();
         });
 
-        it('should change scheduler state to enabled', function() {
-            this.vm.schedulerEnabled = false;
+        it('should change integration state to enabled', function() {
+            this.vm.enabled = false;
 
-            this.vm.changeSchedulerState();
+            this.vm.changeIntegrationState();
             this.$rootScope.$apply();
 
-            expect(this.oneNetworkIntegrationSchedulerService.enableScheduler).toHaveBeenCalled();
+            expect(this.oneNetworkIntegrationService.enable).toHaveBeenCalled();
         });
     });
 });
