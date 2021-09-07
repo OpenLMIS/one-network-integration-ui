@@ -33,7 +33,7 @@ describe('openlmis.administration.oneNetworkIntegration', function() {
         };
 
         spyOn(this.oneNetworkIntegrationService, 'getStatus')
-            .andReturn(this.$q.resolve(this.integration));
+            .and.returnValue(this.$q.resolve(this.integration));
 
         this.goToUrl = goToUrl;
         this.getResolvedValue = getResolvedValue;
