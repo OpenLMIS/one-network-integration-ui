@@ -34,19 +34,19 @@ describe('oneNetworkIntegrationController', function() {
         };
 
         spyOn(this.oneNetworkIntegrationService, 'enable')
-            .and.returnValue(this.$q.resolve(this.integration));
+            .andReturn(this.$q.resolve(this.integration));
         spyOn(this.oneNetworkIntegrationService, 'disable')
-            .and.returnValue(this.$q.resolve({
+            .andReturn(this.$q.resolve({
                 enabled: false
             }));
 
         var context = this;
         spyOn(this.$state, 'go');
-        spyOn(this.FunctionDecorator.prototype, 'decorateFunction').and.callFake(function(fn) {
+        spyOn(this.FunctionDecorator.prototype, 'decorateFunction').andCallFake(function(fn) {
             context.fn = fn;
             return this;
         });
-        spyOn(this.FunctionDecorator.prototype, 'getDecoratedFunction').and.callFake(function() {
+        spyOn(this.FunctionDecorator.prototype, 'getDecoratedFunction').andCallFake(function() {
             return context.fn;
         });
 

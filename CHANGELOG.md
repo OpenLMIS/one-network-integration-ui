@@ -6,6 +6,3 @@ Improvements:
 
 New functionality:
 * [OLMIS-7311](https://openlmis.atlassian.net/browse/OLMIS-7311): Added the ability to enable/disable integration.
-
-Bug fixes:
-* [OLMIS-7314](https://openlmis.atlassian.net/browse/OLMIS-7314): Fix tests after karma upgrade.
